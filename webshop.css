@@ -1,0 +1,36 @@
+
+body{
+    background-color: beige;
+}
+
+.product{
+    color: black;
+}
+
+.title{
+    
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.email{
+
+display: flex;
+justify-content: center;
+align-items: center;
+padding-top: 20px;
+padding-bottom: 10px;
+}
+.password{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 10px;
+}
+
+.click{
+    display: flex;
+    justify-content: center;
+}
+
