@@ -18,6 +18,7 @@ $products = $statement->fetchAll(PDO::FETCH_ASSOC);
     <title>Document</title>
 </head>
 <body>
+    <h1>hello</h1>
 <?php foreach($products as $product): ?>
 <article>
     <h2 class= "product" >
