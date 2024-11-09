@@ -1,31 +1,62 @@
 <?php
-$conn = new PDO('mysql:dbname=webshop1;host=localhost', 'root', '');
-// select * from products and fetch as array
-$statement= $conn->prepare("SELECT * FROM products");
-$statement->execute();
-$products = $statement->fetchAll(PDO::FETCH_ASSOC);
+session_start();
 
+// Check if the user is logged in
+if ($_SESSION['loggedin'] !== true) {
+    header('Location: login.php');
+    exit;
+}
 
+// Database connection details
+$host = 'localhost'; // Your MySQL server
+$dbname = 'webshop1'; // Your database name
+$username = 'root'; // Your MySQL username
+$password = ''; // Your MySQL password
 
+try {
+    // Create a PDO instance (connect to the database)
+    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
 
+    // Set PDO error mode to exception
+    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+    // Fetch products from the database
+    $stmt = $conn->prepare("SELECT title, price, img FROM products");
+    $stmt->execute();
+
+    // Fetch all products as an associative array
+    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+} catch (PDOException $e) {
+    echo "Connection failed: " . $e->getMessage();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="webshop.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    <title>Webshop</title>
 </head>
 <body>
-    <h1>hello</h1>
-<?php foreach($products as $product): ?>
-<article>
-    <h2 class= "product" >
-    <?php echo $product['title']  ?>: €<?php echo $product['price']?>
-    </h2>
-</article>
-<?php endforeach ?>
+    <h1> Welcome to Soundscape </h1>
+    <div class= "producten">
+
+        <!-- Display products -->
+        <?php if (!empty($products)): ?>
+            <?php foreach ($products as $product): ?>
+                <article>
+                    <h2 class="product">
+                        <?php echo htmlspecialchars($product['title']); ?>: €<?php echo htmlspecialchars($product['price']); ?>
+                    </h2>
+                    <img src="<?php echo htmlspecialchars ($product['img']); ?>" alt="Product" />
+                </article>
+                <?php endforeach; ?>
+                <?php else: ?>
+                    <p>No products available at the moment.</p>
+                    <?php endif; ?>
+                </div>
     
 </body>
 </html>

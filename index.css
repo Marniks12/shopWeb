@@ -1,0 +1,31 @@
+
+h1{
+    color: b;
+}
+.producten {
+    display: flex;              /* Enable flexbox on the body */
+    flex-wrap: wrap;           /* Allow wrapping of articles */
+    justify-content:left; /* Align items to the start */
+    gap: 20px;                 /* Space between the articles */
+}
+article {
+    
+    display: flex;              /* Use flex to align content inside the article */
+    flex-direction: column;     /* Align items vertically inside each article */
+    align-items: center;        /* Center items horizontally */
+    box-sizing: border-box;     /* Include padding and border in element's total width and height */
+}
+
+/* Image styles */
+article img {
+    height: 100px; 
+    width: 100px; 
+}
+
+/* Heading styles */
+h2 {
+    background-color:green;
+    color: white;              /* Change text color for better contrast */
+    padding: 5px;             /* Add some padding */
+    text-align: center;       /* Center the text */
+}

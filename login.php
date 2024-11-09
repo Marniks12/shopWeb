@@ -1,7 +1,23 @@
 <?php
-function canLogin($p_email, $p_password){
-	if($p_email ==="Marvis" && $p_password==="123"){
-		return true;
+function canLogin($email, $password){
+
+	$conn = new PDO('mysql:host=localhost;dbname=webshop1', 'root', '',);
+	$statement = $conn->prepare ('SELECT * FROM inlog WHERE email = :email');
+	$statement->bindValue(':email', $email);
+	$statement->execute();
+
+	$user = 	$statement->fetch(PDO::FETCH_ASSOC);
+	
+	if($user){
+		$hash = $user['password'];
+		if (password_verify($password,$hash)){
+			return true;
+
+		}
+		else{
+			return false;
+		}
+
 	}
 	else{
 		return false;
@@ -40,14 +56,15 @@ if(!empty($_POST)){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="webshop.css">
     <title>Document</title>
-   
+	
 </head>
 <body>
+
   
-<h1 class= "title">
-Log in
-</h1>
-<div class="netflixLogin">
+	<div class="netflixLogin">
+	<h1 class= "title">
+	Log in
+	</h1>
 		<div class="form form--login">
 			<form action="" method="post">
 				

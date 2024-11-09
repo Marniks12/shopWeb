@@ -1,0 +1,151 @@
+body{
+    background-color: black;
+}
+.header{
+    background-color: green;
+    width: 100vw; /* Breedte van het hele scherm */
+  margin-top: -20px;
+  margin-left: -20px;
+  padding-right: 40px;
+    display: flex;
+   margin-bottom: 20px;
+  
+  
+}
+
+.search{
+    width: 40px;
+    padding-left: 1000px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    color: white;
+
+}
+
+.shop{
+    width: 35px;
+    padding-left: 100px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    color: white;
+}
+.person{
+    width: 35px;
+    padding-left: 100px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+    color: white;
+}
+
+h1{
+display:flex;
+justify-content: flex-start;
+align-items: center;
+padding-left: 40px;
+
+color: white;
+}
+.heading{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Flexbox container */
+.categories-container {
+    display: flex;
+    flex-wrap: wrap; /* Artikelen naar de volgende regel laten gaan als ze niet passen */
+    gap: 40px; /* Ruimte tussen de artikelen */
+    justify-content: center; /* Horizontaal centreren */
+}
+
+/* Standaard styling voor elk artikel */
+.categories-container article {
+    flex: 1 1 200px; /* Laat de artikelen groeien, krimpen en een basisbreedte van 200px hebben */
+    max-width: 250px; /* Maximaal breedte om layout consistent te houden */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    background-color: white;
+    text-align: center;
+    border-radius: 20px;
+}
+
+/* Afbeelding styling binnen het artikel */
+.categories-container article img {
+    max-width: 100%;
+    height: auto;
+    background-color:white;
+    border-radius: 20px; /* Ronde hoeken voor de afbeelding */
+}
+
+.dunne-lijn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 40px;
+    height: 1px;              /* Dikte van de lijn */
+    background-color: white;  /* Kleur van de lijn */
+    width: 100%;              /* Breedte van de lijn */
+}
+
+/* Slideshow container styling */
+.slideshow-container {
+    position: relative;
+    max-width: 800px;
+    margin: auto;
+    overflow: hidden;
+    border-radius: 30px;
+    background-color: white;
+}
+
+.promo-slide {
+    display: none;
+}
+
+.promoimg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 450px;
+    height: 450px;
+    border-radius: 20px;
+}
+
+/* Navigatieknoppen */
+button.prev, button.next {
+    position: absolute;
+    top: 50%;
+    width: auto;
+    padding: 16px;
+    color: green;
+    font-weight: bold;
+    font-size: 18px;
+    transition: 0.3s;
+    background-color: green;
+    cursor: pointer;
+    border: none;
+    border-radius: 3px;
+    user-select: none;
+}
+
+button.prev {
+    left: 10px;
+}
+
+button.next {
+    right: 10px;
+}
+
+button:hover {
+    background-color:green;
+}
+
+.closing{
+    font-size: 1%;
+    color: aqua;
+}
+
