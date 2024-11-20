@@ -40,23 +40,21 @@ try {
     <title>Webshop</title>
 </head>
 <body>
-    <h1> Welcome to Soundscape </h1>
-    <div class= "producten">
+    <h1>Welcome to Soundscape</h1>
+    <div class="producten">
 
         <!-- Display products -->
         <?php if (!empty($products)): ?>
             <?php foreach ($products as $product): ?>
                 <article>
-                    <h2 class="product">
-                        <?php echo htmlspecialchars($product['title']); ?>: €<?php echo htmlspecialchars($product['price']); ?>
-                    </h2>
-                    <img src="<?php echo htmlspecialchars ($product['img']); ?>" alt="Product" />
+                    <img src="<?php echo htmlspecialchars($product['img']); ?>" alt="Product" />
+                    <h2><?php echo htmlspecialchars($product['title']); ?></h2>
+                    <h1> €  <?php echo htmlspecialchars($product['price']); ?></h1>
                 </article>
-                <?php endforeach; ?>
-                <?php else: ?>
-                    <p>No products available at the moment.</p>
-                    <?php endif; ?>
-                </div>
-    
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>No products available at the moment.</p>
+        <?php endif; ?>
+    </div>
 </body>
 </html>

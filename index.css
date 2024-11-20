@@ -1,31 +1,97 @@
+/* CSS Styling */
+body {
+    background-color: black;
+}
 
-h1{
-    color: b;
+h1 {
+    color: white; /* Change to white for better visibility on black background */
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
+
 .producten {
-    display: flex;              /* Enable flexbox on the body */
-    flex-wrap: wrap;           /* Allow wrapping of articles */
-    justify-content:left; /* Align items to the start */
-    gap: 20px;                 /* Space between the articles */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 70px;
+    padding: 20px;  
 }
+
+/* Article container styling */
 article {
-    
-    display: flex;              /* Use flex to align content inside the article */
-    flex-direction: column;     /* Align items vertically inside each article */
-    align-items: center;        /* Center items horizontally */
-    box-sizing: border-box;     /* Include padding and border in element's total width and height */
+    display: grid;
+    grid-template-columns: 25% 25% 25% 25%;
+    height: 350px;
+    width: 350px;
+  justify-content: center; 
+    align-items:center ;    /* Center image and title horizontally */
+    background-color: #333;
+    padding: 15px;
+    padding-left: 10px;
+    border-radius: 15px;
 }
 
 /* Image styles */
 article img {
-    height: 100px; 
-    width: 100px; 
+    display: grid;
+    justify-content: center;
+    
+    background-color: white;
+    border-radius: 15%;
+    height: 350px;
+    width: 350px;
+   
 }
 
-/* Heading styles */
-h2 {
-    background-color:green;
-    color: white;              /* Change text color for better contrast */
-    padding: 5px;             /* Add some padding */
-    text-align: center;       /* Center the text */
+/* Heading styles for product title */
+article h2 {
+
+    height: 60px;
+    width: 200px;
+          /* Space between image and title */
+    color: white;
+    font-size: 1.2em;
+    text-align: center;
+    justify-content: center;
+    background-color: green;
+    padding: 5px 30px;
+    border-radius: 25px;
+    margin-left: -19px;
+
+    margin-top: 290px;
 }
+
+article h1{
+    margin-top: 10px; 
+    
+          
+    color: white;
+    font-size: 1.2em;
+    text-align: center;
+    background-color: green;
+    padding: 5px 10px;
+    border-radius: 5px;
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
