@@ -1,21 +1,38 @@
 <?php
-    if(!empty($_POST)){
-        $email = $_POST['email'];
-        $password = $_POST['password'];
-        
+require 'User.php';
+
+if (!empty($_POST)) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    // Verbind met de database
+    $conn = new PDO('mysql:host=localhost;dbname=webshop1', 'root', '');
+
+    // Controleer of het e-mailadres al bestaat
+    $statement = $conn->prepare('SELECT * FROM inlog WHERE email = :email');
+    $statement->bindValue(':email', $email);
+    $statement->execute();
+    $existingUser = $statement->fetch(PDO::FETCH_ASSOC);
+
+    if ($existingUser) {
+        $error = "Dit e-mailadres is al geregistreerd. Probeer een ander e-mailadres.";
+    } else {
+        // Hash het wachtwoord
         $options = ['cost' => 12];
-        $hash = password_hash($_POST['password'], PASSWORD_DEFAULT,$options);
-        
+        $hash = password_hash($password, PASSWORD_DEFAULT, $options);
 
-        $conn = new PDO('mysql:host=localhost;dbname=webshop1', 'root', '',);
-        $statement = $conn->prepare('INSERT INTO inlog (email, password) values (:email, :password)');
-        $statement->bindValue(':email', $email);
-        $statement->bindValue(':password', $hash);
-		$statement->execute();
-        
+        // Voeg de gebruiker toe aan de database
+        $insertStatement = $conn->prepare('INSERT INTO inlog (email, password, usertype, currency_unit) VALUES (:email, :password, "user", 1000)');
+        $insertStatement->bindValue(':email', $email);
+        $insertStatement->bindValue(':password', $hash);
+        $insertStatement->execute();
+
+        $success = "Account succesvol aangemaakt! Je kunt nu inloggen.";
+        header('Location: login.php'); // Zorg ervoor dat dit naar je loginpagina verwijst
+        exit(); // Beëindig script om verder uitvoeren te voorkomen
     }
+}
 ?>
-
 
 <!DOCTYPE html>
 <html lang="nl">
@@ -32,11 +49,19 @@
         <!-- Titel -->
         <h1 class="title">Maak een nieuw account</h1>
 
+        <!-- Feedbackberichten -->
+        <?php if (isset($error)): ?>
+            <div class="error">
+                <p><?php echo $error; ?></p>
+            </div>
+        <?php elseif (isset($success)): ?>
+            <div class="success">
+                <p><?php echo $success; ?></p>
+            </div>
+        <?php endif; ?>
+
         <!-- Signup Formulier -->
         <form class="form--signup" action="" method="post">
-          
-            
-
             <!-- E-mail veld -->
             <div class="email">
                 <label for="email">E-mail:</label>
@@ -49,21 +74,13 @@
                 <input type="password" id="password" name="password" required>
             </div>
 
-           
-
             <!-- Signup knop -->
             <div class="click">
                 <input type="submit" value="Registreren">
             </div>
-            <?php if(isset($error)): ?>
-            <!-- Foutmelding (indien van toepassing) -->
-            <div class="error" style="display:none;">
-                <!-- Hier komt de foutmelding -->
-                Oeps, iets ging fout. Probeer opnieuw.
-            </div>
-            <?php endif ?>
         </form>
     </div>
 
 </body>
 </html>
+

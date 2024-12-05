@@ -1,10 +1,25 @@
 <?php
-session_start();
 
-// Check if the user is logged in
-if ($_SESSION['loggedin'] !== true) {
-    header('Location: login.php');
-    exit;
+session_start(); // Start de sessie
+
+// Voeg het product toe aan de winkelwagen
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $product_id = $_POST['product_id'];
+    $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
+   if (!isset($_SESSION['cart'])) {
+    $_SESSION['cart'] = [];
+}
+
+// Controleer of het product al in de winkelwagen zit
+if (isset($_SESSION['cart'][$product_id])) {
+    $_SESSION['cart'][$product_id] += $quantity; // Voeg toe aan bestaande hoeveelheid
+} else {
+    $_SESSION['cart'][$product_id] = $quantity; // Voeg nieuw product toe
+}
+
+// Redirect terug naar de productpagina
+header('Location: cart.php');
+exit;
 }
 
 // Database connection details
@@ -21,7 +36,7 @@ try {
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // Fetch products from the database
-    $stmt = $conn->prepare("SELECT title, price, img FROM products");
+    $stmt = $conn->prepare("SELECT title, price, img, id FROM products");
     $stmt->execute();
 
     // Fetch all products as an associative array
@@ -40,17 +55,31 @@ try {
     <title>Webshop</title>
 </head>
 <body>
-    <h1>Welcome to Soundscape</h1>
+<?php include 'header.php'; ?> <!-- Header wordt hier ingeladen -->
+    
     <div class="producten">
 
         <!-- Display products -->
         <?php if (!empty($products)): ?>
             <?php foreach ($products as $product): ?>
-                <article>
-                    <img src="<?php echo htmlspecialchars($product['img']); ?>" alt="Product" />
-                    <h2><?php echo htmlspecialchars($product['title']); ?></h2>
-                    <h1> €  <?php echo htmlspecialchars($product['price']); ?></h1>
-                </article>
+                <a href="detail.php?id=<?php echo htmlspecialchars($product['id']); ?>" style="text-decoration: none; color: inherit;">
+        
+    <article>
+    
+        <img src="<?php echo htmlspecialchars($product['img']); ?>" alt="Product" />
+       
+        <h2><?php echo htmlspecialchars($product['title']); ?>
+    
+        <form method="POST">
+                <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
+                <button type="submit">Voeg toe aan winkelmandje</button>
+            </form>
+    </h2>
+        <h1>€ <?php echo htmlspecialchars($product['price']); ?></h1>
+       
+    </article>
+</a>
+
             <?php endforeach; ?>
         <?php else: ?>
             <p>No products available at the moment.</p>

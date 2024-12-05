@@ -1,22 +1,32 @@
-let slideIndex = 0;
-showSlide(slideIndex);
+function searchProduct() {
+    const query = document.getElementById('searchInput').value;
 
-// Functie om een specifieke slide te tonen
-function showSlide(index) {
-    const slides = document.querySelectorAll(".promo-slide");
-    slides.forEach((slide, i) => {
-        slide.style.display = i === index ? "block" : "none";
-    });
+    if (query.length < 1) {
+        document.getElementById('searchResults').innerHTML = '';
+        return;
+    }
+
+    fetch(`search.php?query=${encodeURIComponent(query)}`)
+        .then(response => response.json())
+        .then(data => {
+            const resultsContainer = document.getElementById('searchResults');
+            resultsContainer.innerHTML = '';
+
+            if (data.length > 0) {
+                data.forEach(product => {
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+                    resultItem.innerHTML = `
+                        <a href="detail.php?id=${product.id}">
+                            <h4>${product.name}</h4>
+                            <p>${product.description}</p>
+                        </a>
+                    `;
+                    resultsContainer.appendChild(resultItem);
+                });
+            } else {
+                resultsContainer.innerHTML = '<p>No results found.</p>';
+            }
+        })
+        .catch(error => console.error('Error fetching search results:', error));
 }
-
-// Functie om naar de volgende/vorige slide te gaan
-function changeSlide(n) {
-    const slides = document.querySelectorAll(".promo-slide");
-    slideIndex = (slideIndex + n + slides.length) % slides.length;
-    showSlide(slideIndex);
-}
-
-// Automatisch door de slides heen gaan
-setInterval(() => {
-    changeSlide(1); // Ga elke 3 seconden naar de volgende slide
-}, 3000);

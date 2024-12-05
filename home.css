@@ -1,43 +1,147 @@
+
+html, body {
+    overflow-x: hidden; /* Voorkomt horizontale beweging */
+    margin: 0; /* Zorg ervoor dat er geen witte rand ontstaat */
+}
+
+
 body{
     background-color: black;
 }
-.header{
-    background-color: green;
-    width: 100vw; /* Breedte van het hele scherm */
-  margin-top: -20px;
-  margin-left: -20px;
-  padding-right: 40px;
-    display: flex;
-   margin-bottom: 20px;
-  
-  
+
+
+
+/* Header stijl */
+.header {
+    background-color: #000; /* Zwarte achtergrond */
+    color: white; /* Witte tekst */
+    padding: 10px 20px;
 }
 
-.search{
-    width: 40px;
-    padding-left: 1000px;
+.header-container {
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    color: white;
-
+    align-items: center;
+    justify-content: space-between; /* Verdeel ruimte tussen logo, link en iconen */
+}
+/* Witte lijn onder de header */
+.header::after {
+    content: '';
+    display: block;
+    height: 3px; /* Dikte van de lijn */
+    background-color: white; /* Kleur van de lijn */
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+/* Logo styling */
+.logo {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    margin-right: 20px;
 }
 
-.shop{
-    width: 35px;
-    padding-left: 100px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
+/* Link styling */
+.products-link {
     color: white;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 20px;
 }
-.person{
-    width: 35px;
-    padding-left: 100px;
+
+.products-link:hover {
+    text-decoration: underline;
+}
+
+/* Navigatie iconen container */
+.icons-container {
     display: flex;
-    justify-content: flex-end;
-    align-items: flex-end;
-    color: white;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Zoekbalk styling */
+.search-bar {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.search-results {
+    position: absolute;
+    top: 110%; /* Zorg ervoor dat het onder het zoekveld staat */
+    left: 0;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    z-index: 1000;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none; /* Standaard verborgen */
+}
+
+.search-results.active {
+    display: block; /* Alleen zichtbaar bij actieve zoekopdrachten */
+}
+
+.result-item {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+.result-item img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.result-item h4 {
+    margin: 0;
+    font-size: 16px;
+}
+
+.result-item p {
+    margin: 0;
+    color: #555;
+    font-size: 14px;
+}
+
+.search-bar input {
+    border: none;
+    padding: 8px 15px;
+    width: 200px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-bar button {
+    background-color: transparent;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.search-bar .icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Icoon styling */
+.icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
 }
 
 h1{
@@ -116,29 +220,7 @@ color: white;
 }
 
 /* Navigatieknoppen */
-button.prev, button.next {
-    position: absolute;
-    top: 50%;
-    width: auto;
-    padding: 16px;
-    color: green;
-    font-weight: bold;
-    font-size: 18px;
-    transition: 0.3s;
-    background-color: green;
-    cursor: pointer;
-    border: none;
-    border-radius: 3px;
-    user-select: none;
-}
 
-button.prev {
-    left: 10px;
-}
-
-button.next {
-    right: 10px;
-}
 
 button:hover {
     background-color:green;

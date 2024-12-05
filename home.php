@@ -2,7 +2,7 @@
 $host = 'localhost'; // Your MySQL server
 $dbname = 'webshop1'; // Your database name
 $username = 'root'; // Your MySQL username
-$password = ''; // Your MySQL password
+$password = ''; // Your MySQL passwordends
 
 try {
     // Create a PDO instance (connect to the database)
@@ -38,14 +38,11 @@ try {
     <title>Document</title>
 </head>
 <body>
-    <div class= "header">
-    <h1> Soundscape</h1>  
-    <img class="search" src="icons/search.svg" alt="">
-    <img class="shop" src="icons/shop.svg" alt="">
-    <img class="person" src="icons/person.svg" alt="">
-    </div>
+    <?php include 'header.php'; ?> <!-- Header wordt hier ingeladen -->
+    <script src="script.js"></script>
+
   
-    <h1 class="heading">Our categories</h1>
+    <h1 class="heading">Onze categorieen</h1>
    <?php if (!empty($categories)): ?>
        <div class="categories-container"> <!-- Nieuwe container voor flexbox -->
             <?php foreach ($categories as $categorie): ?>
