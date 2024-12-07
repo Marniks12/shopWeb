@@ -1,4 +1,6 @@
 <?php
+require_once 'session.php';
+
 $host = 'localhost';
 $dbname = 'webshop1';
 $username = 'root';

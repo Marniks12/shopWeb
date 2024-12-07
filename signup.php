@@ -1,4 +1,7 @@
+
 <?php
+require_once 'session.php';
+
 require 'User.php';
 
 if (!empty($_POST)) {
@@ -83,4 +86,3 @@ if (!empty($_POST)) {
 
 </body>
 </html>
-

@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/session.php';  // Correcte pad naar session.php
+require_once __DIR__ . '/db.php';       // Correcte pad naar db.php
 
 class Product {
     private $conn;

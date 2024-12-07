@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once 'session.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product_id = $_POST['product_id'];
 
@@ -10,4 +11,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: cart.php');
     exit;
 }
-?>
+?>  

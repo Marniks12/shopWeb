@@ -6,16 +6,20 @@
         
         <!-- Link naar index -->
         <a href="index.php" class="products-link">Al mijn producten</a>
+
+
+        <a href="index.php?action=logout" onclick="return confirm('Weet je zeker dat je wilt uitloggen?');">Uitloggen</a>
+
         
         <!-- Navigatie pictogrammen -->
-        <div class="icons-container">
-            <!-- Zoekbalk -->
-            <div class="search-bar">
-                <input type="text" placeholder="Search..." />
+        <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search..." onkeyup="searchProduct()">
                 <button type="submit">
                     <img src="icons/search.svg" alt="Search" class="icon">
                 </button>
+                <div id="searchResults" class="search-results"></div>
             </div>
+
 
             <!-- Shop icoon -->
              <a href="cart.php">

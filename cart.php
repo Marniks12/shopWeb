@@ -1,5 +1,7 @@
 <?php
-session_start(); // Start de sessie
+require_once 'session.php';
+require_once 'User.php';
+
 
 // Databaseverbinding
 $host = 'localhost';
@@ -92,7 +94,7 @@ try {
                 .then(data => {
                     if (data.success) {
                         // Update de totaalprijs per product
-                        document.querySelector(`#total-${productId}`).innerText = `${data.new_total.toFixed(2)}`;
+                        document.querySelector(#total-${productId}).innerText = ${data.new_total.toFixed(2)};
                         // Update de algemene subtotaal
                         updateSubtotal(data.subtotal);
                     }
@@ -102,7 +104,7 @@ try {
 
             // Functie om het subtotaal van de winkelwagen bij te werken
             function updateSubtotal(subtotal) {
-                document.querySelector("#subtotal").innerText = `${subtotal.toFixed(2)}`;
+                document.querySelector("#subtotal").innerText = ${subtotal.toFixed(2)};
             }
         });
     </script>
@@ -159,4 +161,3 @@ try {
     <a href="index.php">Verder winkelen</a>
 </body>
 </html>
-

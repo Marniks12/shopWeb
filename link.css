@@ -1,0 +1,86 @@
+/* Header stijl */
+.header {
+    background-color: #000; /* Zwarte achtergrond */
+    color: white; /* Witte tekst */
+    padding: 10px 20px;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Verdeel ruimte tussen logo, link en iconen */
+}
+/* Witte lijn onder de header */
+.header::after {
+    content: '';
+    display: block;
+    height: 3px; /* Dikte van de lijn */
+    background-color: white; /* Kleur van de lijn */
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+/* Logo styling */
+.logo {
+    font-size: 36px;
+    font-weight: bold;
+    color: #fff;
+    margin-right: 20px;
+}
+
+/* Link styling */
+.products-link {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+    margin-right: 20px;
+}
+
+.products-link:hover {
+    text-decoration: underline;
+}
+
+/* Navigatie iconen container */
+.icons-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* Zoekbalk styling */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-right: 10px;
+}
+
+.search-bar input {
+    border: none;
+    padding: 8px 15px;
+    width: 200px;
+    font-size: 14px;
+    outline: none;
+}
+
+.search-bar button {
+    background-color: transparent;
+    border: none;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.search-bar .icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Icoon styling */
+.icon {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}

@@ -16,16 +16,7 @@ body {
     justify-content: space-between; /* Verdeel ruimte tussen logo, link en iconen */
 }
 /* Witte lijn onder de header */
-.header::after {
-    content: '';
-    display: block;
-    height: 3px; /* Dikte van de lijn */
-    background-color: white; /* Kleur van de lijn */
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
+
 /* Logo styling */
 .logo {
     font-size: 36px;
@@ -91,17 +82,35 @@ body {
 }
 
 
-.header::after {
-    content: '';
-    display: block;
-    height: 3px;
-    background-color: white;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
+
+
+
+.filters {
+    display: flex;
+    justify-content: space-around;
+    padding: 20px;
+    
+    border-bottom: 1px solid #ddd;
 }
 
+.filters h2 {
+    margin: 0;
+}
+
+
+.filters h2 a {
+    text-decoration: none;
+    color: #007bff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+
+.filters h2 a:hover {
+    background: #007bff;
+    color: white;
+}
 
 h1 {
     color: white; /* Change to white for better visibility on black background */
@@ -203,6 +212,9 @@ article h1{
 .producten button:active {
     background-color: #004085;
 }
+
+
+
 
 
 

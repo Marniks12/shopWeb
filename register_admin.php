@@ -1,4 +1,6 @@
 <?php
+require_once 'session.php';
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Databaseverbinding
     $host = 'localhost';
@@ -16,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $usertype = 'admin'; // Zet de usertype als 'admin'
 
         // Voeg de admin toe aan de database
-        $stmt = $conn->prepare("INSERT INTO users (email, password, usertype) VALUES (:email, :password, :usertype)");
+        $stmt = $conn->prepare("INSERT INTO inlog (email, password, usertype) VALUES (:email, :password, :usertype)");
         $stmt->bindValue(':email', $email);
         $stmt->bindValue(':password', $password);
         $stmt->bindValue(':usertype', $usertype);

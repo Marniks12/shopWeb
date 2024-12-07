@@ -1,0 +1,103 @@
+/* Algemene reset voor marges en padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Algemene stijlen voor het hele document */
+body {
+    font-family: Arial, sans-serif;
+    background-color: black; /* Zwarte achtergrond */
+    color: white; /* Witte tekstkleur */
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Sectie voor de admin acties */
+.admin-actions {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    background-color: #333; /* Donkergrijze achtergrond voor de sectie */
+    padding: 20px;
+    border-radius: 8px;
+}
+
+/* Titel van de admin sectie */
+.admin-actions h2 {
+    color: #28a745; /* Groene kleur voor de sectie titel */
+    margin-bottom: 20px;
+}
+
+/* Stijl voor individuele product secties */
+.add-product, .update-product {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #222; /* Donkerder grijs voor de product secties */
+    border-radius: 8px;
+}
+
+/* Subtitels voor producten */
+h3 {
+    color: #28a745; /* Groene kleur voor subtitels */
+    margin-bottom: 10px;
+}
+
+/* Stijlen voor de invoervelden */
+input[type="text"], input[type="number"], input[type="url"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #444;
+    border-radius: 4px;
+    background-color: #111; /* Donkergrijze achtergrond voor invoervelden */
+    color: white;
+    font-size: 16px;
+}
+
+/* Stijl voor de knoppen */
+button, .btn {
+    background-color: #28a745; /* Groene knoppen */
+    color: white;
+    padding: 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+button:hover, .btn:hover {
+    background-color: #218838; /* Donkerder groen bij hover */
+}
+
+/* Stijl voor de verwijderknop */
+.delete {
+    background-color: #dc3545; /* Rood voor verwijderknop */
+}
+
+.delete:hover {
+    background-color: #c82333; /* Donkerder rood bij hover */
+}
+
+/* Stijl voor de formuliervelden in de update sectie */
+.update-form input {
+    background-color: #111; /* Donkergrijze achtergrond voor de update velden */
+}
+
+/* Extra marges voor forms */
+form {
+    margin-bottom: 20px;
+}
+
+/* Foutmelding */
+.error-message {
+    color: red;
+    margin-top: 10px;
+}

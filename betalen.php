@@ -1,5 +1,6 @@
 <?php
-session_start(); // Start de sessie
+require_once 'session.php';
+
 
 // Controleer of de gebruiker ingelogd is
 if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
@@ -50,7 +51,7 @@ try {
             // Begin een transactie
             $conn->beginTransaction();
 
-            // **1. Bestelling opslaan in de `orders` tabel**
+            // **1. Bestelling opslaan in de orders tabel**
             $stmt = $conn->prepare("
                 INSERT INTO orders (user_id, total_price, status, order_date, shipping_address, payment_method)
                 VALUES (:user_id, :total_price, 'completed', NOW(), 'Geen adres', 'paypal')
@@ -60,7 +61,7 @@ try {
             $stmt->execute();
             $orderId = $conn->lastInsertId(); // Het ID van de nieuwe bestelling ophalen
 
-            // **2. Producten opslaan in de `order_items` tabel**
+            // **2. Producten opslaan in de order_items tabel**
             foreach ($cart as $product_id => $quantity) {
                 $stmt = $conn->prepare("
                     INSERT INTO order_items (order_id, product_id, quantity, price)
@@ -111,4 +112,3 @@ try {
     echo "Fout bij verbinden met de database: " . $e->getMessage();
 }
 ?>
-
