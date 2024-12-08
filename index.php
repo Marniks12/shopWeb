@@ -31,9 +31,9 @@ exit;
 
 // Database connection details
 $host = 'localhost'; 
-$dbname = 'webshop1';
+$dbname = 'autorack.proxy.rlwy.net';
 $username = 'root'; 
-$password = ''; 
+$password = 'LCgridLferyrTmqlPoMOhGFMxAOkakMD'; 
 
 try {
     $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
