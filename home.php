@@ -50,7 +50,7 @@ try {
                 <p>No categories available at the moment.</p>
                 <?php endif; ?>
                 
-                <div class="dunne-lijn"></div>
+               
                 <h1>De nieuwste producten</h1>
                 <!-- Slideshow container -->
                 <div class="slideshow-container">
@@ -62,19 +62,9 @@ try {
                     </div>
                     
                     
-                    <!-- Knoppen voor navigatie -->
-                    <button class="prev" onclick="changeSlide(-1)">❮</button>
-                    <button class="next" onclick="changeSlide(1)">❯</button>
-                    <h5 class="closing">
-                        Welcome to Soundscape - Premium Audio for Every Moment
-                        Soundscape is your go-to for high-quality audio gear, 
-                        offering the latest in headphones, earbuds, speakers, 
-                        and accessories. Designed for both comfort and performance, 
-                        our products deliver powerful sound and cutting-edge features like Bluetooth® connectivity and noise cancellation. 
-                        Whether you’re after deep bass, crisp highs, or all-day comfort, Soundscape has the perfect audio solution for you.
-                    </h5>
+                
                     
-    <script src="script.js"></script>
+
 </body>
 
 </html>

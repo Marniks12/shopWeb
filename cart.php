@@ -56,6 +56,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>Winkelwagen</title>
+    <link rel="stylesheet" href="cart.css">
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             // Functie voor de Increase button

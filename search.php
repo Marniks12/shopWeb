@@ -1,31 +1,20 @@
 <?php
-require_once 'session.php'; // Zorg ervoor dat de sessie is gestart
-require_once 'User.php'; // Zorg ervoor dat de Db-klasse is geladen
+require_once 'session.php'; // Zorg dat de databaseklasse is inbegrepen
+require_once  'User.php';
+if (isset($_GET['search'])) {
+    $search = '%' . $_GET['search'] . '%'; // Voeg wildcards toe voor LIKE-query
 
-// Verwerk zoekopdrachten en haal producten op
-try {
-    // Maak verbinding met de database via de Db-klasse
-    $conn = Db::getConnection();
+    try {
+        $conn = Db::getConnection();
+        $stmt = $conn->prepare("SELECT id, title, description, price FROM products WHERE title LIKE :search OR description LIKE :search");
+        $stmt->bindParam(':search', $search, PDO::PARAM_STR);
+        $stmt->execute();
 
-    if (isset($_GET['search']) && !empty($_GET['search'])) {
-        // Zoekterm toevoegen voor LIKE query
-        $search = "%" . $_GET['search'] . "%";
-        
-        // Zoek in de kolommen title, price, en description
-        $stmt = $conn->prepare("SELECT id, title, price FROM products WHERE title LIKE :search OR description LIKE :search OR price LIKE :search");
-        $stmt->bindParam(':search', $search, PDO::PARAM_STR);  // Bind de zoekterm voor de LIKE query
-    } else {
-        // Als er geen zoekopdracht is, haal alle producten op
-        $stmt = $conn->prepare("SELECT id, title, price FROM products");
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        echo json_encode($results); // JSON-uitvoer voor gebruik in JavaScript
+    } catch (PDOException $e) {
+        echo json_encode([]); // Stuur een lege array als er een fout optreedt
     }
-
-    // Voer de query uit
-    $stmt->execute();
-    
-    // Haal alle resultaten op
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    // Foutafhandeling bij databaseproblemen
-    echo "Verbinding mislukt: " . $e->getMessage();
+} else {
+    echo json_encode([]); // Geen zoekterm, stuur een lege array
 }
-?>

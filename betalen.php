@@ -1,6 +1,6 @@
 <?php
 require_once 'session.php';
-require 'User.php'; // Zorg ervoor dat de Db-klasse is ingeladen
+require_once 'User.php'; // Zorg ervoor dat de Db-klasse is ingeladen
 
 // Controleer of de gebruiker ingelogd is
 if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {

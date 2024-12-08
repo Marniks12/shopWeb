@@ -1,6 +1,7 @@
 <?php
 require_once 'User.php';// Laad de Db-klasse
-session_start(); // Start de sessie
+require_once 'session.php';
+
 
 // Controleer of de gebruiker is ingelogd
 if (!isset($_SESSION['user_id'])) {

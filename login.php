@@ -6,6 +6,8 @@ require 'User.php';
 // Start de sessie voor sessiebeheer
 
 
+
+
 // Controleer of het formulier is ingediend
 if (!empty($_POST)) {
     // Haal de ingevoerde e-mail en wachtwoord op uit het formulier

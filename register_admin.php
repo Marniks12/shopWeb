@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->execute()) {
             echo "Admin succesvol geregistreerd!";
-            header('Location: admin.php'); // Stuur door naar de adminpagina na registratie
+            header('Location: index.php'); // Stuur door naar de adminpagina na registratie
             exit;
         } else {
             echo "Er is een fout opgetreden bij de registratie.";
@@ -36,6 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <title>Registreer Admin</title>
+    <link rel="stylesheet" href="register.css">
 </head>
 <body>
     <h1>Registreer als Admin</h1>

@@ -1,10 +1,8 @@
 <?php
 require_once 'session.php';
-require_once 'User.php';
- // Gebruik de Db-klasse
-include_once 'user_info.php'; // Laadt het bestand waar de gebruikersnaam wordt opgehaald
+require_once 'User.php'; 
+include_once 'user_info.php'; 
 
-// Voeg het product toe aan de winkelwagen
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product_id = $_POST['product_id'];
     $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
@@ -13,42 +11,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['cart'] = [];
     }
 
-    // Controleer of het product al in de winkelwagen zit
     if (isset($_SESSION['cart'][$product_id])) {
-        $_SESSION['cart'][$product_id] += $quantity; // Voeg toe aan bestaande hoeveelheid
+        $_SESSION['cart'][$product_id] += $quantity;
     } else {
-        $_SESSION['cart'][$product_id] = $quantity; // Voeg nieuw product toe
+        $_SESSION['cart'][$product_id] = $quantity;
     }
 
-    // Redirect terug naar de winkelwagenpagina
     header('Location: cart.php');
     exit;
 }
 
 try {
-    // Maak verbinding met de database via Db-klasse
     $conn = Db::getConnection();
 
-    // Haal producten op uit de database
-    $stmt = $conn->prepare("SELECT title, price, img, id FROM products");
-    $stmt->execute();
+    if (!isset($_GET['id'])) {
+        exit("Product niet gevonden.");
+    }
 
-    // Fetch alle producten als een associatieve array
-    $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-} catch (PDOException $e) {
-    echo "Databaseverbinding mislukt: " . $e->getMessage();
-    exit;
-}
-
-// Controleer of een ID is doorgegeven
-if (!isset($_GET['id'])) {
-    exit("Product niet gevonden.");
-}
-
-// Haal productdetails en commentaren op uit de database
-try {
-    // Haal het product op op basis van de ID
     $stmt = $conn->prepare("SELECT * FROM products WHERE id = :id");
     $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
     $stmt->execute();
@@ -58,7 +37,6 @@ try {
         exit("Product niet gevonden.");
     }
 
-    // Haal commentaren op voor dit product
     $commentStmt = $conn->prepare("
         SELECT c.comment, u.email, c.created_at
         FROM comments c
@@ -76,7 +54,6 @@ try {
 }
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,10 +61,9 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="detail.css">
     <title><?php echo htmlspecialchars($product['title']); ?></title>
-    
 </head>
 <body>
-    <?php include 'header.php'; ?> <!-- Header wordt hier ingeladen -->
+    <?php include 'header.php'; ?>
 
     <div class="product-container">
         <img src="<?php echo htmlspecialchars($product['img']); ?>" alt="Product Image" class="product-image">
@@ -105,22 +81,67 @@ try {
             <button type="submit">Voeg toe aan winkelmandje</button>
         </form>
     </div>
-    <div id="comments">
-    <h3>Reacties:</h3>
-    <?php if (!empty($comments)): ?>
-        <?php foreach ($comments as $comment): ?>
-            <div class="comment">
-                <p><strong><?php echo htmlspecialchars($comment['email']); ?></strong> schreef:</p>
-                <p><?php echo htmlspecialchars($comment['comment']); ?></p>
-                <p><small>Op <?php echo htmlspecialchars($comment['created_at']); ?></small></p>
-            </div>
-        <?php endforeach; ?>
-    <?php else: ?>
-        <p>Er zijn nog geen reacties voor dit product.</p>
-    <?php endif; ?>
-</div>
 
-  <script src="comment.js"></script>
-    
+    <div id="comments">
+        <h3>Reacties:</h3>
+        <?php if (!empty($comments)): ?>
+            <?php foreach ($comments as $comment): ?>
+                <div class="comment">
+                    <p><strong><?php echo htmlspecialchars($comment['email']); ?></strong> schreef:</p>
+                    <p><?php echo htmlspecialchars($comment['comment']); ?></p>
+                    <p><small>Op <?php echo htmlspecialchars($comment['created_at']); ?></small></p>
+                </div>
+            <?php endforeach; ?>
+        <?php else: ?>
+            <p>Er zijn nog geen reacties voor dit product.</p>
+        <?php endif; ?>
+    </div>
+
+    <div id="comment-form">
+        <h3>Laat een reactie achter:</h3>
+        <textarea id="comment-text" rows="4" placeholder="Schrijf hier je commentaar..." required></textarea>
+        <button type="button" onclick="submitComment()">Indienen</button>
+    </div>
+
+    <script>
+    async function submitComment() {
+        const commentText = document.getElementById('comment-text').value;
+        const productId = <?php echo $_GET['id']; ?>;
+
+        if (!commentText.trim()) {
+            alert('Commentaar mag niet leeg zijn.');
+            return;
+        }
+
+        try {
+            const response = await fetch('add_comment.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    product_id: productId,
+                    comment: commentText
+                })
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                const commentSection = document.getElementById('comments');
+                const newComment = document.createElement('div');
+                newComment.classList.add('comment');
+                newComment.innerHTML = `<p><strong>Jij</strong> schreef:</p><p>${commentText}</p><p><small>Op nu</small></p>`;
+                commentSection.insertBefore(newComment, commentSection.firstChild);
+
+                document.getElementById('comment-text').value = '';
+            } else {
+                alert('Er is een fout opgetreden bij het toevoegen van je commentaar.');
+            }
+        } catch (error) {
+            console.error('Fout bij het verzenden van het commentaar:', error);
+            alert('Er is een netwerkfout opgetreden.');
+        }
+    }
+    </script>
 </body>
 </html>

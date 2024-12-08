@@ -1,9 +1,150 @@
-.cartimage {
+/* Algemene instellingen */
+body {
+    background-color: black; /* Zwarte achtergrondkleur */
+    color: white; /* Witte tekstkleur */
+    font-family: Arial, sans-serif; /* Eenvoudig lettertype */
+    margin: 0;
+    padding: 0;
     display: flex;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
-    max-width: 100%;
-    height: auto;
-  
-    border-radius: 8px;
+    height: 100vh;
+}
+
+/* Titel en algemene tekst */
+h1 {
+    font-size: 2em;
     margin-bottom: 20px;
 }
+
+p {
+    font-size: 1.2em;
+    margin-bottom: 20px;
+}
+
+a {
+    color: white;
+    text-decoration: none;
+    background-color: green;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 1.1em;
+    margin-top: 20px;
+}
+
+a:hover {
+    background-color: darkgreen;
+}
+
+/* Winkelwagen container */
+.cart-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    background-color: #333;
+    padding: 20px;
+    margin: 10px 0;
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.product-details {
+    color: white;
+    font-size: 1.1em;
+    flex: 2;
+}
+
+.quantity {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.quantity button {
+    background-color: green;
+    border: none;
+    color: white;
+    padding: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.quantity button:hover {
+    background-color: darkgreen;
+}
+
+.quantity input {
+    width: 50px;
+    height: 40px;
+    text-align: center;
+    font-size: 1.2em;
+    background-color: #222;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+}
+
+.total {
+    color: white;
+    font-size: 1.1em;
+    flex: 1;
+    text-align: center;
+}
+
+form {
+    display: inline-block;
+    margin-top: 10px;
+}
+
+/* Verwijder knop */
+form button {
+    background-color: red;
+    color: white;
+    padding: 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: darkred;
+}
+
+/* Subtotaal weergave */
+.subtotal {
+    font-size: 1.5em;
+    margin-top: 30px;
+    color: white;
+}
+
+/* Betalen knop */
+#pay-button {
+    background-color: green;
+    color: white;
+    padding: 15px 30px;
+    border: none;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+#pay-button:hover {
+    background-color: darkgreen;
+}
+

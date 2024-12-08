@@ -1,0 +1,71 @@
+/* Algemene stijlen */
+body {
+    font-family: Arial, sans-serif; /* Eenvoudig lettertype */
+    background-color: #f4f4f4; /* Lichte achtergrondkleur */
+    color: #333; /* Donkere tekstkleur */
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* Hoofdtitel */
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 2em;
+}
+
+/* Formulier stijlen */
+form {
+    background-color: #fff; /* Witte achtergrond voor het formulier */
+    padding: 20px;
+    border-radius: 8px; /* Afgeronde hoeken */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Schaduw effect */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px; /* Breedte van het formulier */
+}
+
+/* Formulier labels en invoervelden */
+label {
+    font-size: 1.1em;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input[type="email"],
+input[type="password"] {
+    padding: 10px;
+    font-size: 1em;
+    border: 1px solid #ccc; /* Lichte randkleur */
+    border-radius: 4px; /* Afgeronde hoeken voor invoervelden */
+    width: 100%; /* Vul de breedte van het formulier */
+    box-sizing: border-box; /* Zorgt ervoor dat padding en border worden meegerekend in de breedte */
+}
+
+/* Knop stijlen */
+button {
+    background-color: #4CAF50; /* Groene achtergrondkleur */
+    color: white;
+    padding: 12px 20px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 5px; /* Afgeronde hoeken voor de knop */
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #45a049; /* Donkergroene achtergrondkleur bij hover */
+}
+
+/* Foutmelding of succesbericht */
+p {
+    font-size: 1.1em;
+    color: red;
+}

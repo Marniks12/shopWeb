@@ -24,16 +24,7 @@ body{
     justify-content: space-between; /* Verdeel ruimte tussen logo, link en iconen */
 }
 /* Witte lijn onder de header */
-.header::after {
-    content: '';
-    display: block;
-    height: 3px; /* Dikte van de lijn */
-    background-color: white; /* Kleur van de lijn */
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
+
 /* Logo styling */
 .logo {
     font-size: 36px;

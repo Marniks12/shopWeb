@@ -3,7 +3,7 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background-color: #f9f9f9;
+      background-color: black;
     }
     .container {
       max-width: 800px;
@@ -14,13 +14,13 @@
     }
     h1 {
       text-align: center;
-      color: #333;
+      color: black;
     }
     .section {
       margin-bottom: 30px;
     }
     .section h2 {
-      color: #555;
+      color: black;
       border-bottom: 2px solid #0078d7;
       padding-bottom: 5px;
     }
@@ -48,7 +48,7 @@
       margin-top: 5px;
     }
     button {
-      background-color: #0078d7;
+      background-color: green;
       color: #fff;
       border: none;
       cursor: pointer;
