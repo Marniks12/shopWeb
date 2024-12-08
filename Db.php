@@ -5,7 +5,7 @@ class Db {
         if(self :: $conn ==null){
             
             
-            self::$conn = new PDO ('mysql:host=autorack.proxy.rlwy.net;dbname=webshop1', 'root', 'PLbHxNbRwwWziDDYpeBrWBnmDhbhsOGZ');
+            self::$conn = new PDO ('mysql:host=autorack.proxy.rlwy.net;dbname=railway', 'root', 'PLbHxNbRwwWziDDYpeBrWBnmDhbhsOGZ');
             return self :: $conn;
         }
         else{
