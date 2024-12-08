@@ -9,7 +9,7 @@ if (!empty($_POST)) {
     $password = $_POST['password'];
 
     // Verbind met de database
-   require_once 'db.php';
+   require_once 'Db.php';
 
     // Controleer of het e-mailadres al bestaat
     $statement = $conn->prepare('SELECT * FROM inlog WHERE email = :email');
