@@ -1,7 +1,6 @@
 <?php 
-require_once 'session.php';
-
-require_once 'User.php'; // Zorg ervoor dat je de User klasse laadt
+require_once __DIR__ . '/../includes/session.php';
+require_once __DIR__ . '/../includes/User.php'; // Zorg ervoor dat je de User klasse laadt
 
 
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
