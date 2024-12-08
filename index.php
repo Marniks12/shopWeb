@@ -1,7 +1,12 @@
 <?php 
 require_once 'session.php';
+<<<<<<< HEAD
 require_once 'User.php'; // Zorg ervoor dat je de User klasse laadt
  // Gebruik de Db-klasse
+=======
+
+require_once 'User.php';
+>>>>>>> a81c8c76066edf1cd2dc8628844ed964529a7d50
 
 // Logout functionaliteit
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
@@ -26,10 +31,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
         $_SESSION['cart'][$product_id] = $quantity; // Voeg nieuw product toe
     }
 
+<<<<<<< HEAD
     // Redirect terug naar de winkelwagenpagina
     header('Location: cart.php');
     exit;
 }
+=======
+// Database connection details
+$host = 'autorack.proxy.rlwy.net'; 
+$dbname = 'webshop1';
+$username = 'root'; 
+$password = 'LCgridLferyrTmqlPoMOhGFMxAOkakMD'; 
+>>>>>>> a81c8c76066edf1cd2dc8628844ed964529a7d50
 
 try {
     // Maak een verbinding met de database
