@@ -1,43 +1,39 @@
 <?php 
 require_once 'session.php';
-
 require_once 'User.php'; // Zorg ervoor dat je de User klasse laadt
+ // Gebruik de Db-klasse
 
-
+// Logout functionaliteit
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
     User::logout(); // Roep de logout-functie aan
+    header('Location: login.php'); // Optionele redirect na logout
+    exit;
 }
 
-
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Winkelwagen logica
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['product_id'])) {
     $product_id = $_POST['product_id'];
     $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
-   if (!isset($_SESSION['cart'])) {
-    $_SESSION['cart'] = [];
-}
 
-// Controleer of het product al in de winkelwagen zit
-if (isset($_SESSION['cart'][$product_id])) {
-    $_SESSION['cart'][$product_id] += $quantity; // Voeg toe aan bestaande hoeveelheid
-} else {
-    $_SESSION['cart'][$product_id] = $quantity; // Voeg nieuw product toe
-}
+    if (!isset($_SESSION['cart'])) {
+        $_SESSION['cart'] = [];
+    }
 
-// Redirect terug naar de productpagina
-header('Location: cart.php');
-exit;
-}
+    // Controleer of het product al in de winkelwagen zit
+    if (isset($_SESSION['cart'][$product_id])) {
+        $_SESSION['cart'][$product_id] += $quantity; // Voeg toe aan bestaande hoeveelheid
+    } else {
+        $_SESSION['cart'][$product_id] = $quantity; // Voeg nieuw product toe
+    }
 
-// Database connection details
-$host = 'localhost'; 
-$dbname = 'webshop1';
-$username = 'root'; 
-$password = ''; 
+    // Redirect terug naar de winkelwagenpagina
+    header('Location: cart.php');
+    exit;
+}
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Maak een verbinding met de database
+    $conn = Db::getConnection();
 
     // Haal de geselecteerde categorie op uit de URL (indien aanwezig)
     $selected_category = isset($_GET['category']) ? $_GET['category'] : null;
@@ -55,76 +51,53 @@ try {
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    echo "Er is een probleem met de databaseverbinding: " . $e->getMessage();
+    die(); // Stop de uitvoering bij een fout
 }
 
 // Verwerk de formulieracties (product toevoegen, bijwerken, verwijderen)
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['add_product'])) {
-        // Product toevoegen
-        $title = $_POST['title'];
-        $price = $_POST['price'];
-        $img = $_POST['img'];
-        $categorie_id = $_POST['categorie_id'];
-        $description = $_POST['description'];
-
-        try {
+    try {
+        if (isset($_POST['add_product'])) {
+            // Product toevoegen
             $stmt = $conn->prepare("INSERT INTO products (title, price, img, categorie_id, description) 
                                     VALUES (:title, :price, :img, :categorie_id, :description)");
             $stmt->execute([
-                'title' => $title,
-                'price' => $price,
-                'img' => $img,
-                'categorie_id' => $categorie_id,
-                'description' => $description
+                'title' => $_POST['title'],
+                'price' => $_POST['price'],
+                'img' => $_POST['img'],
+                'categorie_id' => $_POST['categorie_id'],
+                'description' => $_POST['description']
             ]);
             echo "<p>Product succesvol toegevoegd!</p>";
-        } catch (PDOException $e) {
-            echo "Fout bij het toevoegen van het product: " . $e->getMessage();
         }
-    }
 
-    if (isset($_POST['update_product'])) {
-        // Product bijwerken
-        $product_id = $_POST['product_id'];
-        $title = $_POST['title'];
-        $price = $_POST['price'];
-        $img = $_POST['image_url'];
-        $categorie_id = $_POST['categorie_id'];
-        $description = $_POST['description'];
-
-        try {
+        if (isset($_POST['update_product'])) {
+            // Product bijwerken
             $stmt = $conn->prepare("UPDATE products SET title = :title, price = :price, img = :img, categorie_id = :categorie_id, description = :description
                                     WHERE id = :product_id");
             $stmt->execute([
-                'title' => $title,
-                'price' => $price,
-                'img' => $img,
-                'categorie_id' => $categorie_id,
-                'description' => $description,
-                'product_id' => $product_id
+                'title' => $_POST['title'],
+                'price' => $_POST['price'],
+                'img' => $_POST['img'],
+                'categorie_id' => $_POST['categorie_id'],
+                'description' => $_POST['description'],
+                'product_id' => $_POST['product_id']
             ]);
             echo "<p>Product succesvol bijgewerkt!</p>";
-        } catch (PDOException $e) {
-            echo "Fout bij het bijwerken van het product: " . $e->getMessage();
         }
-    }
 
-    if (isset($_POST['delete_product'])) {
-        // Product verwijderen
-        $product_id = $_POST['product_id'];
-
-        try {
+        if (isset($_POST['delete_product'])) {
+            // Product verwijderen
             $stmt = $conn->prepare("DELETE FROM products WHERE id = :product_id");
-            $stmt->execute(['product_id' => $product_id]);
+            $stmt->execute(['product_id' => $_POST['product_id']]);
             echo "<p>Product succesvol verwijderd!</p>";
-        } catch (PDOException $e) {
-            echo "Fout bij het verwijderen van het product: " . $e->getMessage();
         }
+    } catch (PDOException $e) {
+        echo "Er is een probleem bij het verwerken van het formulier: " . $e->getMessage();
     }
 }
-?> 
-
+?>
 
 
 

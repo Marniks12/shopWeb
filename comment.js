@@ -1,25 +1,31 @@
-document.getElementById('comment-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    const comment = document.getElementById('comment').value;
-    const productId = document.getElementById('product-id').value; // Zorg ervoor dat product_id beschikbaar is in een verborgen inputveld.
 
-    fetch('add_comment.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `product_id=${productId}&comment=${encodeURIComponent(comment)}`
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert(data.message);
-            const commentsList = document.getElementById('comments-list');
-            const newComment = document.createElement('div');
-            newComment.textContent = comment;
-            commentsList.appendChild(newComment);
-            document.getElementById('comment').value = '';
-        } else {
-            alert(data.message);
-        }
-    })
-    .catch(error => console.error('Fout:', error));
-});
+  
+    function loadComments(productId) {
+    fetch(`get_comments.php?id=${productId}`)
+        .then(response => response.json())
+        .then(data => {
+            const commentSection = document.getElementById('comments');
+            commentSection.innerHTML = ''; // Maak de sectie leeg
+
+            if (data.error) {
+                commentSection.innerHTML = `<p>Error: ${data.error}</p>`;
+            } else if (data.length === 0) {
+                commentSection.innerHTML = '<p>Er zijn nog geen reacties voor dit product.</p>';
+            } else {
+                data.forEach(comment => {
+                    const commentDiv = document.createElement('div');
+                    commentDiv.className = 'comment';
+                    commentDiv.innerHTML = `
+                        <p><strong>${comment.email}</strong> schreef:</p>
+                        <p>${comment.comment}</p>
+                        <p><small>Op ${comment.created_at}</small></p>
+                    `;
+                    commentSection.appendChild(commentDiv);
+                });
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching comments:', error);
+            document.getElementById('comments').innerHTML = '<p>Fout bij het laden van reacties.</p>';
+        });
+}

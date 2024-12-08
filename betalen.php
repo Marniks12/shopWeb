@@ -1,6 +1,6 @@
 <?php
 require_once 'session.php';
-
+require 'User.php'; // Zorg ervoor dat de Db-klasse is ingeladen
 
 // Controleer of de gebruiker ingelogd is
 if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
@@ -11,15 +11,9 @@ if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
 // Haal de email van de ingelogde gebruiker
 $userEmail = $_SESSION['email'];
 
-// Databaseverbinding
-$host = 'localhost';
-$dbname = 'webshop1';
-$username = 'root';
-$password = '';
-
+// Maak verbinding via de Db-klasse
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $conn = Db::getConnection(); // Verbinding maken via Db-klasse
 
     // Haal de currency_unit op voor de ingelogde gebruiker
     $stmt = $conn->prepare("SELECT id, currency_unit FROM inlog WHERE email = :email");

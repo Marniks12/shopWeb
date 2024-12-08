@@ -1,33 +1,24 @@
 <?php
-require_once 'session.php';
-
-$host = 'localhost'; // Your MySQL server
-$dbname = 'webshop1'; // Your database name
-$username = 'root'; // Your MySQL username
-$password = ''; // Your MySQL passwordends
+require_once 'session.php'; // Voor sessiebeheer
+require_once 'User.php';// Zorg dat je de Db-klasse gebruikt
 
 try {
-    // Create a PDO instance (connect to the database)
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
+    // Maak een verbinding met de database via de Db-klasse
+    $conn = Db::getConnection();
 
-    // Set PDO error mode to exception
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-    // Fetch products from the database
+    // Haal de categorieën op uit de database
     $stmt = $conn->prepare("SELECT title, img FROM categories");
-    
     $stmt->execute();
-
-    // Fetch all products as an associative array
     $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-
+    // Haal de promotieafbeeldingen op uit de database
     $stmt = $conn->prepare("SELECT img FROM promo");
     $stmt->execute();
     $promos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    echo "Er is een probleem met de databaseverbinding: " . $e->getMessage();
+    die(); // Stop de uitvoering bij een fout
 }
 ?>
 

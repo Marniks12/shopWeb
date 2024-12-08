@@ -13,57 +13,32 @@
 </html>
 <?php
 require_once 'session.php';
+require 'User.php'; // Laad de Db-klasse
 
-require_once 'User.php';
- // Zorg ervoor dat de sessie wordt gestart
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $data = json_decode(file_get_contents('php://input'), true);
 
-// Controleer of de gebruiker een admin is
-$isAdmin = isset($_SESSION['usertype']) && $_SESSION['usertype'] === 'admin'; 
+    $product_id = $data['product_id'];
+    $comment = $data['comment'];
+    $user_id = $_SESSION['user_id']; // Haal de gebruiker op uit de sessie
 
-// Stel user object in (of je kunt usertype ophalen)
-$user = isset($_SESSION['email']) ? $_SESSION['email'] : null;
+    try {
+        // Maak verbinding via de Db-klasse
+        $conn = Db::getConnection(); // Verbinding maken via Db-klasse
 
-if ($isAdmin && $user): ?>
-    <section class="admin-actions">
+        // Voeg het commentaar toe aan de database
+        $stmt = $conn->prepare("
+            INSERT INTO comments (product_id, user_id, comment, created_at) 
+            VALUES (:product_id, :user_id, :comment, NOW())
+        ");
+        $stmt->bindParam(':product_id', $product_id, PDO::PARAM_INT);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':comment', $comment, PDO::PARAM_STR);
+        $stmt->execute();
 
-
-        <!-- Product toevoegen -->
-        <section class="add-product">
-            <h3>Nieuw product toevoegen</h3>
-            <form method="POST" action="index.php" class="product-form">
-                <input type="text" name="title" placeholder="Productnaam" required>
-                <input type="number" name="price" step="0.01" placeholder="Prijs (€)" required>
-                <input type="url" name="img" placeholder="Afbeeldings-URL" required>
-                <input type="text" name="categorie_id" placeholder="Categorie-ID">
-                <input type="text" name="description" placeholder="Beschrijving">
-                <button type="submit" name="add_product" class="btn">Product Toevoegen</button>
-            </form>
-        </section>
-
-        <!-- Product bijwerken en verwijderen -->
-        <?php foreach ($products as $product): ?>
-            <section class="update-product">
-                <h3>Product: <?php echo htmlspecialchars($product['title']); ?></h3>
-
-                <!-- Verwijder product -->
-                <form method="POST" action="index.php" onsubmit="return confirm('Weet je zeker dat je dit product wilt verwijderen?');">
-                    <input type="hidden" name="delete_product" value="1">
-                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                    <button type="submit" class="btn delete">Verwijderen</button>
-                </form>
-
-                <!-- Bijwerken van product -->
-                <form method="POST" action="index.php" class="update-form">
-                    <input type="hidden" name="update_product" value="1">
-                    <input type="hidden" name="product_id" value="<?php echo $product['id']; ?>">
-                    <input type="text" name="title" value="<?php echo htmlspecialchars($product['title']); ?>" required>
-                    <input type="number" name="price" step="0.01" value="<?php echo htmlspecialchars($product['price']); ?>" required>
-                    <input type="url" name="image_url" value="<?php echo htmlspecialchars($product['img']); ?>" required>
-                    <input type="text" name="categorie_id" value="<?php echo htmlspecialchars($product['categorie_id'] ?? ''); ?>">
-                    <input type="text" name="description" value="<?php echo htmlspecialchars($product['description'] ?? ''); ?>">
-                    <button type="submit" class="btn">Bijwerken</button>
-                </form>
-            </section>
-        <?php endforeach; ?>
-    </section>
-<?php endif; ?>
+        echo json_encode(['success' => true]);
+    } catch (PDOException $e) {
+        echo json_encode(['success' => false, 'error' => $e->getMessage()]);
+    }
+}
+?>

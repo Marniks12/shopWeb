@@ -1,38 +1,21 @@
 
 <?php
-require_once 'session.php';
-
+require 'session.php';
 require 'User.php';
 
 if (!empty($_POST)) {
     $email = $_POST['email'];
     $password = $_POST['password'];
 
-    // Verbind met de database
-    $conn = new PDO('mysql:host=localhost;dbname=webshop1', 'root', '');
+    // Probeer de gebruiker te registreren via de User-klasse
+    $result = User::signup($email, $password);
 
-    // Controleer of het e-mailadres al bestaat
-    $statement = $conn->prepare('SELECT * FROM inlog WHERE email = :email');
-    $statement->bindValue(':email', $email);
-    $statement->execute();
-    $existingUser = $statement->fetch(PDO::FETCH_ASSOC);
-
-    if ($existingUser) {
-        $error = "Dit e-mailadres is al geregistreerd. Probeer een ander e-mailadres.";
-    } else {
-        // Hash het wachtwoord
-        $options = ['cost' => 12];
-        $hash = password_hash($password, PASSWORD_DEFAULT, $options);
-
-        // Voeg de gebruiker toe aan de database
-        $insertStatement = $conn->prepare('INSERT INTO inlog (email, password, usertype, currency_unit) VALUES (:email, :password, "user", 1000)');
-        $insertStatement->bindValue(':email', $email);
-        $insertStatement->bindValue(':password', $hash);
-        $insertStatement->execute();
-
+    if ($result === true) {
         $success = "Account succesvol aangemaakt! Je kunt nu inloggen.";
-        header('Location: login.php'); // Zorg ervoor dat dit naar je loginpagina verwijst
-        exit(); // Beëindig script om verder uitvoeren te voorkomen
+        header('Location: login.php'); // Redirect naar de loginpagina
+        exit();
+    } else {
+        $error = $result; // Foutmelding als string teruggegeven
     }
 }
 ?>

@@ -1,6 +1,6 @@
 <?php
 require_once 'session.php';
-
+require_once 'User.php'; // Laadt de Db-klasse
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $data = json_decode(file_get_contents('php://input'), true);
@@ -12,14 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Update de sessie met de nieuwe hoeveelheid
     $_SESSION['cart'][$product_id] = $quantity;
 
-    // Haal productgegevens op uit de database
-    $host = 'localhost';
-    $dbname = 'webshop1';
-    $username = 'root';
-    $password = '';
     try {
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // Verkrijg de databaseverbinding via de Db-klasse
+        $conn = Db::getConnection();
 
         // Haal productgegevens op
         $stmt = $conn->prepare("SELECT price FROM products WHERE id = :id");
@@ -49,7 +44,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'new_total' => $new_total,
                 'subtotal' => $subtotal
             ]);
+        } else {
+            echo json_encode(['success' => false, 'error' => 'Product niet gevonden.']);
         }
+
     } catch (PDOException $e) {
         echo json_encode(['success' => false, 'error' => $e->getMessage()]);
     }

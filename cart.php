@@ -1,17 +1,11 @@
 <?php
 require_once 'session.php';
 require_once 'User.php';
-
-
-// Databaseverbinding
-$host = 'localhost';
-$dbname = 'webshop1';
-$username = 'root';
-$password = '';
+ // Laadt de Db-klasse
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Maak verbinding met de database via Db-klasse
+    $conn = Db::getConnection();
 
     // Haal de email van de ingelogde gebruiker
     if (isset($_SESSION['email'])) {
@@ -22,6 +16,7 @@ try {
         $stmt->bindParam(':email', $userEmail);
         $stmt->execute();
         $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
         if ($user) {
             $currency_unit = $user['currency_unit'];
         } else {
@@ -50,9 +45,11 @@ try {
     }
 
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    echo "Databaseverbinding mislukt: " . $e->getMessage();
+    exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -94,7 +91,8 @@ try {
                 .then(data => {
                     if (data.success) {
                         // Update de totaalprijs per product
-                        document.querySelector(#total-${productId}).innerText = ${data.new_total.toFixed(2)};
+                        document.querySelector(`#total-${productId}`).innerText = `${data.new_total.toFixed(2)}`;
+
                         // Update de algemene subtotaal
                         updateSubtotal(data.subtotal);
                     }
@@ -104,7 +102,8 @@ try {
 
             // Functie om het subtotaal van de winkelwagen bij te werken
             function updateSubtotal(subtotal) {
-                document.querySelector("#subtotal").innerText = ${subtotal.toFixed(2)};
+                document.querySelector("#subtotal").innerText = `${subtotal.toFixed(2)}`;
+
             }
         });
     </script>

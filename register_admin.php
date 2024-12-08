@@ -1,16 +1,11 @@
 <?php
 require_once 'session.php';
+require_once 'User.php'; // Laad de Db-klasse
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Databaseverbinding
-    $host = 'localhost';
-    $dbname = 'webshop1';
-    $username = 'root';
-    $password = '';
-
     try {
-        $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-        $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        // Maak verbinding via de Db-klasse
+        $conn = Db::getConnection(); // Verbinding maken via Db-klasse
 
         // Gegevens ophalen uit het formulier
         $email = $_POST['email'];
@@ -35,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="nl">
 <head>

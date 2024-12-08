@@ -1,4 +1,5 @@
 <?php
+require_once 'User.php';// Laad de Db-klasse
 session_start(); // Start de sessie
 
 // Controleer of de gebruiker is ingelogd
@@ -7,21 +8,16 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
-// Databaseverbinding
-$host = 'localhost';
-$dbname = 'webshop1';
-$username = 'root';
-$password = '';
 
 try {
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Maak verbinding via de Db-klasse
+    $conn = Db::getConnection(); // Verbinding maken via Db-klasse
 
     // Haal de ingelogde user_id op uit de sessie
     $userId = $_SESSION['user_id'];
 
     // Haal persoonlijke gegevens op
-    $stmt = $conn->prepare("SELECT  email FROM inlog WHERE id = :id");
+    $stmt = $conn->prepare("SELECT email FROM inlog WHERE id = :id");
     $stmt->bindParam(':id', $userId);
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -31,26 +27,28 @@ try {
         exit();
     }
 
+    // Haal de bestellingen van de gebruiker op, inclusief producttitels
     $stmt = $conn->prepare("
-    SELECT o.*, 
-           GROUP_CONCAT(p.title SEPARATOR ', ') AS product_titles 
-    FROM orders o
-    LEFT JOIN order_items oi ON o.id = oi.order_id
-    LEFT JOIN products p ON oi.product_id = p.id
-    WHERE o.user_id = :user_id 
-    GROUP BY o.id
-    ORDER BY o.order_date DESC
-");
-$stmt->bindParam(':user_id', $userId);
-$stmt->execute();
+        SELECT o.*, 
+               GROUP_CONCAT(p.title SEPARATOR ', ') AS product_titles 
+        FROM orders o
+        LEFT JOIN order_items oi ON o.id = oi.order_id
+        LEFT JOIN products p ON oi.product_id = p.id
+        WHERE o.user_id = :user_id 
+        GROUP BY o.id
+        ORDER BY o.order_date DESC
+    ");
+    $stmt->bindParam(':user_id', $userId);
+    $stmt->execute();
 
-// Haal de resultaten op
-$orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Haal de resultaten op
+    $orders = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
     echo "Connection failed: " . $e->getMessage();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="nl">

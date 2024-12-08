@@ -1,13 +1,14 @@
 <?php
 require_once 'session.php';
+require_once 'Db.php';
 
 class User {
     private $db;
     private $email;
 
-    // Constructor: verbind met de database en stel e-mailadres in
+
     public function __construct($email) {
-        $this->db = new PDO('mysql:host=localhost;dbname=webshop1', 'root', '');
+        $this->db = Db::getConnection(); // Gebruik de gedeelde connectie
         $this->email = $email;
     }
 
@@ -40,24 +41,51 @@ class User {
 
     // Functie om een gebruiker in te loggen
     public static function login($email, $password) {
-        $db = new PDO('mysql:host=localhost;dbname=webshop1', 'root', '');
+        $db = Db::getConnection(); // Gebruik de gedeelde connectie
         $statement = $db->prepare('SELECT * FROM inlog WHERE email = :email');
         $statement->bindValue(':email', $email);
         $statement->execute();
-
+    
         $user = $statement->fetch(PDO::FETCH_ASSOC);
-
+    
         if ($user && password_verify($password, $user['password'])) {
-            // Start de sessie (verplaatst naar header.php)
             $_SESSION['loggedin'] = true;
             $_SESSION['email'] = $email;
             $_SESSION['usertype'] = $user['usertype'];
             $_SESSION['user_id'] = $user['id'];
-
+    
             return true;
         }
         return false;
     }
+
+    
+    public static function signup($email, $password) {
+        $db = Db::getConnection();
+    
+        $statement = $db->prepare('SELECT * FROM inlog WHERE email = :email');
+        $statement->bindValue(':email', $email);
+        $statement->execute();
+        $existingUser = $statement->fetch(PDO::FETCH_ASSOC);
+    
+        if ($existingUser) {
+            return "Dit e-mailadres is al geregistreerd. Probeer een ander e-mailadres.";
+        }
+    
+        $options = ['cost' => 12];
+        $hashedPassword = password_hash($password, PASSWORD_DEFAULT, $options);
+    
+        $insertStatement = $db->prepare('INSERT INTO inlog (email, password, usertype, currency_unit) VALUES (:email, :password, "user", 1000)');
+        $insertStatement->bindValue(':email', $email);
+        $insertStatement->bindValue(':password', $hashedPassword);
+    
+        if ($insertStatement->execute()) {
+            return true;
+        }
+    
+        return "Er is een fout opgetreden bij het registreren van het account.";
+    }
+    
 
     // Functie om te controleren of de gebruiker een admin is
     public static function isAdmin() {

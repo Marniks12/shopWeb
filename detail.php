@@ -1,14 +1,14 @@
-?php
+<?php
 require_once 'session.php';
-
+require_once 'User.php';
+ // Gebruik de Db-klasse
 include_once 'user_info.php'; // Laadt het bestand waar de gebruikersnaam wordt opgehaald
-
- // Start de sessie
 
 // Voeg het product toe aan de winkelwagen
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $product_id = $_POST['product_id'];
     $quantity = isset($_POST['quantity']) ? (int)$_POST['quantity'] : 1;
+
     if (!isset($_SESSION['cart'])) {
         $_SESSION['cart'] = [];
     }
@@ -20,23 +20,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['cart'][$product_id] = $quantity; // Voeg nieuw product toe
     }
 
-    // Redirect terug naar de productpagina
+    // Redirect terug naar de winkelwagenpagina
     header('Location: cart.php');
     exit;
 }
 
-// Database connection details
-$host = 'localhost'; // Your MySQL server
-$dbname = 'webshop1'; // Your database name
-$username = 'root'; // Your MySQL username
-$password = ''; // Your MySQL password
-
 try {
-    // Maak verbinding met de database
-    $conn = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-
-    // Zet PDO foutmodi op uitzondering
-    $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    // Maak verbinding met de database via Db-klasse
+    $conn = Db::getConnection();
 
     // Haal producten op uit de database
     $stmt = $conn->prepare("SELECT title, price, img, id FROM products");
@@ -46,12 +37,13 @@ try {
     $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    echo "Databaseverbinding mislukt: " . $e->getMessage();
+    exit;
 }
 
 // Controleer of een ID is doorgegeven
 if (!isset($_GET['id'])) {
-    exit("Product not found.");
+    exit("Product niet gevonden.");
 }
 
 // Haal productdetails en commentaren op uit de database
@@ -63,26 +55,27 @@ try {
 
     $product = $stmt->fetch(PDO::FETCH_ASSOC);
     if (!$product) {
-        exit("Product not found.");
+        exit("Product niet gevonden.");
     }
 
-   // Haal commentaren op voor dit product
-$commentStmt = $conn->prepare("
-SELECT c.comment, u.email, c.created_at
-FROM comments c
-JOIN inlog u ON c.user_id = u.id  -- Gebruik hier 'user_id' in plaats van 'inlog_id'
-WHERE c.product_id = :product_id
-ORDER BY c.created_at DESC
-");
+    // Haal commentaren op voor dit product
+    $commentStmt = $conn->prepare("
+        SELECT c.comment, u.email, c.created_at
+        FROM comments c
+        JOIN inlog u ON c.user_id = u.id
+        WHERE c.product_id = :product_id
+        ORDER BY c.created_at DESC
+    ");
     $commentStmt->bindParam(':product_id', $_GET['id'], PDO::PARAM_INT);
     $commentStmt->execute();
     $comments = $commentStmt->fetchAll(PDO::FETCH_ASSOC);
 
 } catch (PDOException $e) {
-    echo "Connection failed: " . $e->getMessage();
+    echo "Databaseverbinding mislukt: " . $e->getMessage();
+    exit;
 }
-
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -91,42 +84,7 @@ ORDER BY c.created_at DESC
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="detail.css">
     <title><?php echo htmlspecialchars($product['title']); ?></title>
-    <script>
-        // Haal de comments op via AJAX
-        function loadComments(productId) {
-            fetch(get_comments.php?id=${productId})
-                .then(response => response.json())
-                .then(data => {
-                    const commentSection = document.getElementById('comments');
-                    commentSection.innerHTML = ''; // Maak de sectie leeg
-
-                    if (data.error) {
-                        commentSection.innerHTML = <p>Error: ${data.error}</p>;
-                    } else if (data.length === 0) {
-                        commentSection.innerHTML = '<p>Er zijn nog geen reacties voor dit product.</p>';
-                    } else {
-                        data.forEach(comment => {
-                            const commentDiv = document.createElement('div');
-                            commentDiv.className = 'comment';
-                            commentDiv.innerHTML = 
-                                <strong>${comment.username}</strong>
-                                <p>${comment.comment}</p>
-                            ;
-                            commentSection.appendChild(commentDiv);
-                        });
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching comments:', error);
-                    document.getElementById('comments').innerHTML = '<p>Fout bij het laden van reacties.</p>';
-                });
-        }
-
-        // Roep de functie aan zodra de pagina geladen is
-        document.addEventListener('DOMContentLoaded', function () {
-            const productId = <?php echo json_encode($_GET['id']); ?>; // Verkrijg het product ID
-            loadComments(productId);
-        });</script>
+    
 </head>
 <body>
     <?php include 'header.php'; ?> <!-- Header wordt hier ingeladen -->
@@ -147,10 +105,22 @@ ORDER BY c.created_at DESC
             <button type="submit">Voeg toe aan winkelmandje</button>
         </form>
     </div>
-
-    <!-- Commentaar sectie -->
     <div id="comments">
-        <!-- Reacties worden hier geladen -->
-    </div>
+    <h3>Reacties:</h3>
+    <?php if (!empty($comments)): ?>
+        <?php foreach ($comments as $comment): ?>
+            <div class="comment">
+                <p><strong><?php echo htmlspecialchars($comment['email']); ?></strong> schreef:</p>
+                <p><?php echo htmlspecialchars($comment['comment']); ?></p>
+                <p><small>Op <?php echo htmlspecialchars($comment['created_at']); ?></small></p>
+            </div>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <p>Er zijn nog geen reacties voor dit product.</p>
+    <?php endif; ?>
+</div>
+
+  <script src="comment.js"></script>
+    
 </body>
 </html>
