@@ -9,7 +9,7 @@ if (!empty($_POST)) {
     $password = $_POST['password'];
 
     // Verbind met de database
-    $conn = new PDO('mysql:host=localhost;dbname=webshop1', 'root', '');
+   require_once 'db.php';
 
     // Controleer of het e-mailadres al bestaat
     $statement = $conn->prepare('SELECT * FROM inlog WHERE email = :email');
