@@ -1,15 +1,10 @@
 <?php 
 require_once 'session.php'; // Zorg ervoor dat je sessie is gestart
 require_once 'User.php'; // Zorg ervoor dat je de User klasse laadt
+ // Gebruik de Db-klasse
 
-// Zorg ervoor dat de sessie wordt gestart
-// Maak verbinding met de database
-try {
-    $conn = Db::getConnection(); // Zorg ervoor dat getConnection() werkt en een geldige databaseverbinding retourneert
-} catch (PDOException $e) {
-    echo "Databaseverbinding mislukt: " . $e->getMessage();
-    die(); // Stop de uitvoering van de script als de verbinding mislukt
-}
+require_once 'User.php';
+
 
 // Logout functionaliteit
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
