@@ -30,8 +30,8 @@ exit;
 }
 
 // Database connection details
-$host = 'localhost'; 
-$dbname = 'autorack.proxy.rlwy.net';
+$host = 'autorack.proxy.rlwy.net'; 
+$dbname = 'webshop1';
 $username = 'root'; 
 $password = 'LCgridLferyrTmqlPoMOhGFMxAOkakMD'; 
 
