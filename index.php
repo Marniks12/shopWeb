@@ -4,7 +4,7 @@ require_once 'session.php';
 require_once 'User.php'; // Zorg ervoor dat je de User klasse laadt
  // Gebruik de Db-klasse
 
-require_once 'User.php';
+
 
 
 // Logout functionaliteit
