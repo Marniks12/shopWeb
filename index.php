@@ -1,10 +1,12 @@
-<?php 
+
+ 
+   <?php 
 require_once 'session.php'; // Zorg ervoor dat je sessie is gestart
 require_once 'User.php'; // Zorg ervoor dat je de User klasse laadt
- // Gebruik de Db-klasse
+require_once 'Db.php'; // Laad de Db-klasse
 
-require_once 'User.php';
-
+// Databaseverbinding initialiseren
+$conn = Db::getConnection(); // Initialiseer de databaseverbinding
 
 // Logout functionaliteit
 if (isset($_GET['action']) && $_GET['action'] === 'logout') {
@@ -96,10 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </div>
 
 <?php 
-// Maak een verbinding met de database
 try {
-    $conn = Db::getConnection();
-
     // Haal de geselecteerde categorie op uit de URL (indien aanwezig)
     $selected_category = isset($_GET['category']) ? $_GET['category'] : null;
 
